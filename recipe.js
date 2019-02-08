@@ -1,5 +1,4 @@
 function search() {
-
   let input = $('#search').val()
   $.post(`http://localhost:3000/recipe/search`, { search : input })
   .done( function(response) {
@@ -58,7 +57,6 @@ function showRecommendation() { // sebelum search
     .fail( function(err) {
       console.log(err)
     })
-
 }
 
 function getDetail(recipeId) {
