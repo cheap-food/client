@@ -77,111 +77,93 @@
   </nav>
 
   <div class="g-signin2" data-onsuccess="onSignIn"></div>
-  <!-- <a href="#" onclick="signOut();">Sign out</a> -->
 
   <div class="container mt-3">
     <div class="row" id="content">
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="./recipe.js"></script>
-  <script src="./translate.js"></script>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script>
-    // search()
-    // getDetail()
-    function checkLogin() {
-      if (localStorage.getItem('token')) {
-          $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
-          .done(response => {
-              console.log(response)
-          })
-          .fail(err => {
-              err.message = `Token tidak valid`
-              // alert(err.message)
-          })
-      } else {
-          console.log(`You have to login first`)
-          // alert(`You have to login first`)
-      }
-    }
-    // getAllLangs()
+  <section id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+          <ul class="list-unstyled list-inline social text-center">
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-instagram"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-google-plus"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fa fa-envelope"></i></a></li>
+          </ul>
+        </div>
+        </hr>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+          <p><u><a href="http://hacktiv8.com/">Cheap Food</a></u> <br> makan murah ga harus beli</p>
+          <p class="h6">&copy All right Reversed.</p>
+        </div>
+        </hr>
+      </div>
+    </div>
+  </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="./recipe.js"></script>
+<script src="./translate.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script>
+  function checkLogin() {
     if (localStorage.getItem('token')) {
         $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
         .done(response => {
             console.log(response)
+            showRecommendation()
         })
         .fail(err => {
             err.message = `Token tidak valid`
-            console.log(err.message)
         })
     } else {
         console.log(`You have to login first`)
-        // alert(`You have to login first`)
     }
-
-    function onSignIn(googleUser) {
-      const id_token = googleUser.getAuthResponse().id_token;
-      $.post(`http://localhost:3000/`, {
-          token: id_token
-      })
+  }
+  // getAllLangs()
+  if (localStorage.getItem('token')) {
+      $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
       .done(response => {
-          localStorage.setItem('token', response)
-          checkLogin()
+          console.log(response)
       })
       .fail(err => {
-        console.log(err)
+          err.message = `Token tidak valid`
+          console.log(err.message)
       })
-    }
+  } else {
+      console.log(`You have to login first`)
+      // alert(`You have to login first`)
+  }
 
-    function signOut() {
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut()
-      .then(function () {
-        localStorage.removeItem('token')
-        console.log('User signed out.');
-      });
-    }
-  </script>
+  function onSignIn(googleUser) {
+    const id_token = googleUser.getAuthResponse().id_token;
+    $.post(`http://localhost:3000/`, {
+        token: id_token
+    })
+    .done(response => {
+        localStorage.setItem('token', response)
+        checkLogin()
+    })
+    .fail(err => {
+      console.log(err)
+    })
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <section id="footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
-					<ul class="list-unstyled list-inline social text-center">
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-facebook"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-twitter"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-instagram"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-google-plus"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fa fa-envelope"></i></a></li>
-					</ul>
-				</div>
-				</hr>
-			</div>
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
-					<p><u><a href="http://hacktiv8.com/">Cheap Food</a></u> <br> makan murah ga harus beli</p>
-					<p class="h6">&copy All right Reversed.</p>
-				</div>
-				</hr>
-			</div>
-		</div>
-  </section>
-
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut()
+    .then(function () {
+      localStorage.removeItem('token')
+      console.log('User signed out.');
+    });
+  }
+</script>
 </body>
 </html>
