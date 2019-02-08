@@ -77,181 +77,93 @@
   </nav>
 
   <div class="g-signin2" data-onsuccess="onSignIn"></div>
-  <!-- <a href="#" onclick="signOut();">Sign out</a> -->
 
   <div class="container mt-3">
     <div class="row" id="content">
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="./recipe.js"></script>
-  <script src="./translate.js"></script>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script>
-     $.get(`http://localhost:3000/recipe/detail/2803`)
-  .done( function(response) {
-    // console.log(response.recipe)
-    $('#content').append(`
-    <div id="foodDetail" class="col-sm-12">
-    <!-- DYNAMIC BAR -->
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <button id="dynamicDetail" class="nav-link active" onclick="dynamicDetail()">Details</button>
-      </li>
-      <li class="nav-item">
-        <button id="dynamicVideo" class="nav-link" onclick="dynamicVideo()">Related Videos</button>
-      </li>
-    </ul>
+  <section id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+          <ul class="list-unstyled list-inline social text-center">
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-instagram"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-google-plus"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fa fa-envelope"></i></a></li>
+          </ul>
+        </div>
+        </hr>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+          <p><u><a href="http://hacktiv8.com/">Cheap Food</a></u> <br> makan murah ga harus beli</p>
+          <p class="h6">&copy All right Reversed.</p>
+        </div>
+        </hr>
+      </div>
+    </div>
+  </section>
 
-    <div id="cardDetailFood" class="card mb-3">
-      <div class="text-center">
-        <h5 class="card-title">${response.recipe.title}</h5>
-        <img
-        class="rounded mx-auto d-block img-thumbnail"
-        src="${response.recipe.image_url}"
-        alt="Card image cap"
-        style="width: 220px">
-      </div>
-      <div class="card-body">
-        <p>Ingredients</p>
-        <p id="ingredients">${response.recipe.ingredients.join(', ')}</p>
-        <a id="ocTranslate" href="#" onclick="google_translate()">Translate to Bahasa</a> </br>
-        <div id="indoLang"></div>
-        <hr>
-        <p>Directions</p>
-        <a href="${response.recipe.source_url}">${response.recipe.publisher}</a> </br>
-      </div>
-    </div>
-    <div id="cardDetailVideo" class="card mb-3">
-    </div>
-  </div>`)
-      // $('#content').empty()
-      $.get(`http://localhost:3000/youtube?search=${response.recipe.title}`)
-        .done(video => {
-          video.result.forEach(vid => {
-            $('#cardDetailVideo').append(`
-            <iframe
-            src="http://www.youtube.com/embed/${vid}"
-            width="500"
-            height="300"
-            frameborder="0"
-            allowfullscreen></iframe>`)
-          })
-        })
-        .fail( function(err) {
-          console.log(err)
-        })
-    })
-    .fail( function(err) {
-      console.log(err)
-    })
-    $("#cardDetailVideo").hide()
-    function dynamicDetail(food) {
-      $("#dynamicDetail").addClass('active')
-      $("#dynamicVideo").removeClass('active')
-      $("#cardDetailFood").show()
-      $("#cardDetailVideo").hide()
-      // $("#content").append(`${food.name}`)
-    }
-    function dynamicVideo() {
-      $("#dynamicDetail").removeClass('active')
-      $("#dynamicVideo").addClass('active')
-      $("#cardDetailFood").hide()
-      $("#cardDetailVideo").show()
-      // $("#cardDetail").empty()
-    }
-    function checkLogin() {
-      if (localStorage.getItem('token')) {
-          $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
-          .done(response => {
-              console.log(response)
-          })
-          .fail(err => {
-              err.message = `Token tidak valid`
-              // alert(err.message)
-          })
-      } else {
-          console.log(`You have to login first`)
-          // alert(`You have to login first`)
-      }
-    }
-    // getAllLangs()
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="./recipe.js"></script>
+<script src="./translate.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script>
+  function checkLogin() {
     if (localStorage.getItem('token')) {
         $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
         .done(response => {
             console.log(response)
+            showRecommendation()
         })
         .fail(err => {
             err.message = `Token tidak valid`
-            console.log(err.message)
         })
     } else {
         console.log(`You have to login first`)
-        // alert(`You have to login first`)
     }
-
-    function onSignIn(googleUser) {
-      const id_token = googleUser.getAuthResponse().id_token;
-      $.post(`http://localhost:3000/`, {
-          token: id_token
-      })
+  }
+  // getAllLangs()
+  if (localStorage.getItem('token')) {
+      $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
       .done(response => {
-          localStorage.setItem('token', response)
-          checkLogin()
+          console.log(response)
       })
       .fail(err => {
-        console.log(err)
+          err.message = `Token tidak valid`
+          console.log(err.message)
       })
-    }
+  } else {
+      console.log(`You have to login first`)
+      // alert(`You have to login first`)
+  }
 
-    function signOut() {
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut()
-      .then(function () {
-        localStorage.removeItem('token')
-        console.log('User signed out.');
-      });
-    }
-  </script>
+  function onSignIn(googleUser) {
+    const id_token = googleUser.getAuthResponse().id_token;
+    $.post(`http://localhost:3000/`, {
+        token: id_token
+    })
+    .done(response => {
+        localStorage.setItem('token', response)
+        checkLogin()
+    })
+    .fail(err => {
+      console.log(err)
+    })
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <section id="footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
-					<ul class="list-unstyled list-inline social text-center">
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-facebook"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-twitter"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-instagram"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-google-plus"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fa fa-envelope"></i></a></li>
-					</ul>
-				</div>
-				</hr>
-			</div>
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
-					<p><u><a href="http://hacktiv8.com/">Cheap Food</a></u> <br> makan murah ga harus beli</p>
-					<p class="h6">&copy All right Reversed.</p>
-				</div>
-				</hr>
-			</div>
-		</div>
-  </section>
-
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut()
+    .then(function () {
+      localStorage.removeItem('token')
+      console.log('User signed out.');
+    });
+  }
+</script>
 </body>
 </html>

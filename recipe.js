@@ -61,6 +61,9 @@ function showRecommendation() { // sebelum search
 
 function getDetail(recipeId) {
 
+  // console.log(recipeId)
+  $('#content').empty()
+
   $.get(`http://localhost:3000/recipe/detail/${recipeId}`)
   .done( function(response) {
     $('#content').append(`
@@ -68,10 +71,10 @@ function getDetail(recipeId) {
     <!-- DYNAMIC BAR -->
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <button id="dynamicDetail" class="nav-link active" onclick="dynamicDetail()">Details</button>
+        <button id="dynamicDetail" class="nav-link active" onclick="">Details</button>
       </li>
       <li class="nav-item">
-        <button id="dynamicVideo" class="nav-link" onclick="dynamicVideo()">Related Videos</button>
+        <button id="dynamicVideo" class="nav-link" onclick="">Related Videos</button>
       </li>
     </ul>
 
@@ -94,9 +97,10 @@ function getDetail(recipeId) {
     <div id="cardDetailVideo" class="card mb-3">
     </div>
   </div>`)
-      // $('#content').empty()
       $.get(`http://localhost:3000/youtube?search=${response.recipe.title}`)
         .done(video => {
+          $("#cardDetailVideo").hide()
+
           video.result.forEach(vid => {
             $('#cardDetailVideo').append(`
             <iframe
@@ -106,6 +110,24 @@ function getDetail(recipeId) {
             frameborder="0"
             allowfullscreen></iframe>`)
           })
+
+          $("#dynamicDetail").click( e => {
+            e.preventDefault();
+
+            $("#dynamicDetail").addClass('active')
+            $("#dynamicVideo").removeClass('active')
+            $("#cardDetailFood").show()
+            $("#cardDetailVideo").hide()
+          })
+
+          $("#dynamicVideo").click( e=> {
+            e.preventDefault()
+
+            $("#dynamicDetail").removeClass('active')
+            $("#dynamicVideo").addClass('active')
+            $("#cardDetailFood").hide()
+            $("#cardDetailVideo").show()
+          })
         })
         .fail( function(err) {
           console.log(err)
@@ -114,21 +136,20 @@ function getDetail(recipeId) {
     .fail( function(err) {
       console.log(err)
     })
-    $("#cardDetailVideo").hide()
-    function dynamicDetail(food) {
-      $("#dynamicDetail").addClass('active')
-      $("#dynamicVideo").removeClass('active')
-      $("#cardDetailFood").show()
-      $("#cardDetailVideo").hide()
-      // $("#content").append(`${food.name}`)
-    }
-    function dynamicVideo() {
-      $("#dynamicDetail").removeClass('active')
-      $("#dynamicVideo").addClass('active')
-      $("#cardDetailFood").hide()
-      $("#cardDetailVideo").show()
-      // $("#cardDetail").empty()
-    }
+    // function dynamicDetail() {
+    //   $("#dynamicDetail").addClass('active')
+    //   $("#dynamicVideo").removeClass('active')
+    //   $("#cardDetailFood").show()
+    //   $("#cardDetailVideo").hide()
+    //   // $("#content").append(`${food.name}`)
+    // }
+    // function dynamicVideo() {
+    //   $("#dynamicDetail").removeClass('active')
+    //   $("#dynamicVideo").addClass('active')
+    //   $("#cardDetailFood").hide()
+    //   $("#cardDetailVideo").show()
+    //   // $("#cardDetail").empty()
+    // }
   }
 
 // showRecommendation()
