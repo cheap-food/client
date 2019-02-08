@@ -17,7 +17,38 @@
   form.form-inline {
     color: #D35348;
   }
+  #search-button {
+    color: #0a15af;
+    border-color: #0a15af;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin:0 auto;
+  }
+  #search-button:hover { 
+    background-color: #97d633;
+  }
+  .btn-outline-success {
+    margin-right: 30px;
+  }
+  .signout-button {
+    color: black;
+    border-color: black;
+  }
+  .signout-button:hover { 
+    background-color: #f9f33e;
+    color: #0225ed;
+  }
+  #navBarSearchForm {
+    margin-left: 30px;
+  /* input[type=text]{
+    width:430px !important; */
+  }
 
+/* .navbar-toggle {
+    z-index:3; */
+/* } */
   </style>
 
   <link rel="stylesheet" href="./footer.css">
@@ -25,14 +56,14 @@
 <body>
 
   <nav class="navbar navbar-expand-lg" style="background-color: #D35348; font-size: 14px !important; line-height: 21px !important;">
-    <a class="navbar-brand" href="#" style="font-size: 17.5px !important; line-height: 26.25px !important;">Navbar</a>
+    <a class="navbar-brand" href="#" style="font-size: 17.5px !important; color:#7FF36D; line-height: 26.25px !important;">Cheap Food</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="font-size: 17.5px !important;">
       <span class="navbar-toggler-icon" style="font-size: 17.5px !important;"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarColor01" style="font-size: 14px !important; line-height: 21px !important;">
       <ul class="navbar-nav mr-auto" style="font-size: 14px !important; line-height: 21px !important;">
-        <li class="nav-item active" style="font-size: 14px !important; line-height: 21px !important;">
+        <!-- <li class="nav-item active" style="font-size: 14px !important; line-height: 21px !important;">
           <a class="nav-link" href="#" style="font-size: 14px !important; line-height: 21px !important;">Home <span class="sr-only" style="font-size: 14px !important; line-height: 21px !important;">(current)</span></a>
         </li>
         <li class="nav-item" style="font-size: 14px !important; line-height: 21px !important;">
@@ -43,6 +74,11 @@
         </li>
         <li class="nav-item" style="font-size: 14px !important; line-height: 21px !important;">
           <a class="nav-link" href="#" style="font-size: 14px !important; line-height: 21px !important;">About</a>
+        </li> -->
+        <li>
+          <form class="form-inline my-2 my-lg-0" id="navBarSearchForm">
+              <input class="form-control mr-sm-2" type="search" placeholder="Aku mau masak..." aria-label="Search">
+          </form>
         </li>
       </ul>
       <!-- <form class="form-inline" style="font-size: 14px !important; line-height: 21px !important;">
@@ -50,11 +86,17 @@
         <button class="btn btn-outline-dark my-3 my-sm-0" type="submit" style="font-size: 14px !important; line-height: 21px !important;">Search</button>
       </form> -->
     </div>
+
+
+    <br>
+    <button class="btn btn-outline-success my-2 my-sm-0 login signout-button" type="button" onclick="signOut();">Sign out</button>
+    <!-- <button><a href="#" onclick="signOut();">Sign out</a></button> -->
   </nav>
 
   <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
-  <a href="#" onclick="signOut();">Sign out</a>
+  <!-- <a href="#" onclick="signOut();">Sign out</a> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 
   <div class="container">
 
@@ -71,8 +113,6 @@
   <script src="./recipe.js"></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script>
-    // console.log(localStorage.getItem('token'))
-
     if (localStorage.getItem('token')) {
         $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
         .done(response => {
@@ -80,7 +120,7 @@
         })
         .fail(err => {
             err.message = `Token tidak valid`
-            alert(err.message)
+            // alert(err.message)
         })
     } else {
         // alert(`You have to login first`)
