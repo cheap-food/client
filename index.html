@@ -47,7 +47,7 @@
   <link rel="stylesheet" href="./footer.css">
 </head>
 <body>
-  <p id="coba" onclick="google_translate()">I'm a superman</p>
+  <!-- <p id="coba" onclick="google_translate()">I'm a superman</p>
 
   <div class="dropdown">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,7 +56,7 @@
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <div id="dropdown-lang"></div>
       </div>
-    </div>
+    </div> -->
 
   <nav class="navbar navbar-expand-lg" style="background-color: #D35348; font-size: 14px !important; line-height: 21px !important;">
     <a class="navbar-brand" href="#" style="font-size: 17.5px !important; color:#7FF36D; line-height: 26.25px !important;">Cheap Food</a>
@@ -76,8 +76,8 @@
     <button class="btn btn-outline-success my-2 my-sm-0 login signout-button" type="button" onclick="signOut();">Sign out</button>
   </nav>
 
-  <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-  <a href="#" onclick="signOut();">Sign out</a> -->
+  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  <!-- <a href="#" onclick="signOut();">Sign out</a> -->
 
   <div class="container mt-3">
     <div class="row" id="content">
@@ -92,6 +92,7 @@
   <script>
      $.get(`http://localhost:3000/recipe/detail/2803`)
   .done( function(response) {
+    // console.log(response.recipe)
     $('#content').append(`
     <div id="foodDetail" class="col-sm-12">
     <!-- DYNAMIC BAR -->
@@ -115,9 +116,12 @@
       </div>
       <div class="card-body">
         <p>Ingredients</p>
-        <p>${response.recipe.ingredients.join(', ')}</p>
+        <p id="ingredients">${response.recipe.ingredients.join(', ')}</p>
+        <a id="ocTranslate" href="#" onclick="google_translate()">Translate to Bahasa</a> </br>
+        <div id="indoLang"></div>
+        <hr>
         <p>Directions</p>
-        <a href="${response.recipe.source_url}">${response.recipe.publisher}</a>
+        <a href="${response.recipe.source_url}">${response.recipe.publisher}</a> </br>
       </div>
     </div>
     <div id="cardDetailVideo" class="card mb-3">
