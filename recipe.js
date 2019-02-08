@@ -4,6 +4,21 @@ function search() {
   $.post(`http://localhost:3000/recipe/search`, { search : input })
   .done( function(response) {
     // console.log(response)// hasil search disini
+    $('#content').empty()
+    response.recipes.slice(0,10).forEach( recipe => {
+      $('#content').append(`
+        <div class="col-sm-6 col-md-4 my-3">
+        <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="${recipe.image_url}" alt="Menu Image">
+                <div class="card-body">
+                  <h5 class="card-title">${recipe.title}</h5>
+                  <p class="card-text">Social Rank : ${recipe.social_rank}</p>
+                  <a href="#" onclick="getDetail('${recipe.recipe_id}')" class="btn btn-primary">View Recipe</a>
+                  </div>
+                  </div>
+        </div>
+        `)
+    })
 
   })
     .catch( function(err) {
@@ -33,7 +48,7 @@ function showRecommendation() { // sebelum search
                 <div class="card-body">
                   <h5 class="card-title">${response.recipes[index].title}</h5>
                   <p class="card-text">Social Rank : ${response.recipes[index].social_rank}</p>
-                  <a href="${response.recipes[index].source_url}" class="btn btn-primary">View Recipe</a>
+                  <a href="#" onclick="getDetail('${response.recipes[index].recipe_id}')" class="btn btn-primary">View Recipe</a>
                   </div>
                   </div>
         </div>
@@ -50,11 +65,72 @@ function getDetail(recipeId) {
 
   $.get(`http://localhost:3000/recipe/detail/${recipeId}`)
   .done( function(response) {
-      console.log(response) // hasil detail recipe disini
+    $('#content').append(`
+    <div id="foodDetail" class="col-sm-12">
+    <!-- DYNAMIC BAR -->
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <button id="dynamicDetail" class="nav-link active" onclick="dynamicDetail()">Details</button>
+      </li>
+      <li class="nav-item">
+        <button id="dynamicVideo" class="nav-link" onclick="dynamicVideo()">Related Videos</button>
+      </li>
+    </ul>
+
+    <div id="cardDetailFood" class="card mb-3">
+      <div class="text-center">
+        <h5 class="card-title">${response.recipe.title}</h5>
+        <img
+        class="rounded mx-auto d-block img-thumbnail"
+        src="${response.recipe.image_url}"
+        alt="Card image cap"
+        style="width: 220px">
+      </div>
+      <div class="card-body">
+        <p>Ingredients</p>
+        <p>${response.recipe.ingredients.join(', ')}</p>
+        <p>Directions</p>
+        <a href="${response.recipe.source_url}">${response.recipe.publisher}</a>
+      </div>
+    </div>
+    <div id="cardDetailVideo" class="card mb-3">
+    </div>
+  </div>`)
+      // $('#content').empty()
+      $.get(`http://localhost:3000/youtube?search=${response.recipe.title}`)
+        .done(video => {
+          video.result.forEach(vid => {
+            $('#cardDetailVideo').append(`
+            <iframe
+            src="http://www.youtube.com/embed/${vid}"
+            width="500"
+            height="300"
+            frameborder="0"
+            allowfullscreen></iframe>`)
+          })
+        })
+        .fail( function(err) {
+          console.log(err)
+        })
     })
     .fail( function(err) {
       console.log(err)
     })
+    $("#cardDetailVideo").hide()
+    function dynamicDetail(food) {
+      $("#dynamicDetail").addClass('active')
+      $("#dynamicVideo").removeClass('active')
+      $("#cardDetailFood").show()
+      $("#cardDetailVideo").hide()
+      // $("#content").append(`${food.name}`)
+    }
+    function dynamicVideo() {
+      $("#dynamicDetail").removeClass('active')
+      $("#dynamicVideo").addClass('active')
+      $("#cardDetailFood").hide()
+      $("#cardDetailVideo").show()
+      // $("#cardDetail").empty()
+    }
   }
 
 // showRecommendation()
