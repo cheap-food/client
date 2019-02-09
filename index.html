@@ -67,13 +67,13 @@
       <ul class="navbar-nav mr-auto" style="font-size: 14px !important; line-height: 21px !important;">
         <li>
           <form class="form-inline my-2 my-lg-0" id="navBarSearchForm">
-            <input class="form-control mr-sm-2" type="search" placeholder="Aku mau masak..." aria-label="Search">
+            <input id="search" class="form-control mr-sm-2" type="search" placeholder="Aku mau masak..." aria-label="Search">
           </form>
         </li>
       </ul>
     </div>
     <br>
-    <button class="btn btn-outline-success my-2 my-sm-0 login signout-button" type="button" onclick="signOut();">Sign out</button>
+    <button id="signout" class="btn btn-outline-success my-2 my-sm-0 login signout-button" type="button" onclick="signOut();">Sign out</button>
   </nav>
 
   <div class="g-signin2" data-onsuccess="onSignIn"></div>
@@ -113,12 +113,14 @@
 <script src="./translate.js"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
+  $('#signout').hide()
   function checkLogin() {
     if (localStorage.getItem('token')) {
         $.post(`http://localhost:3000/verify`, {token: localStorage.getItem('token')})
         .done(response => {
             console.log(response)
             showRecommendation()
+            $('#signout').show()
         })
         .fail(err => {
             err.message = `Token tidak valid`
@@ -161,6 +163,8 @@
     auth2.signOut()
     .then(function () {
       localStorage.removeItem('token')
+      $('#content').empty()
+      $('#signout').hide()
       console.log('User signed out.');
     });
   }

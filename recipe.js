@@ -1,5 +1,6 @@
 function search() {
   let input = $('#search').val()
+  console.log(input)
   $.post(`http://localhost:3000/recipe/search`, { search : input })
   .done( function(response) {
     // console.log(response)// hasil search disini
@@ -89,7 +90,9 @@ function getDetail(recipeId) {
       </div>
       <div class="card-body">
         <p>Ingredients</p>
-        <p>${response.recipe.ingredients.join(', ')}</p>
+        <p id="ingredients">${response.recipe.ingredients.join(', ')}</p>
+        <a href="#" onclick="google_translate()">Translate to Bahasa</a>
+        <div id="indoLang"></div>
         <p>Directions</p>
         <a href="${response.recipe.source_url}">${response.recipe.publisher}</a>
       </div>
@@ -151,6 +154,10 @@ function getDetail(recipeId) {
     //   // $("#cardDetail").empty()
     // }
   }
+$('#navBarSearchForm').submit( function(e) {
+  e.preventDefault()
+  search()
+})
 
 // showRecommendation()
 
